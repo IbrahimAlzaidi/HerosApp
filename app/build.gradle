@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
     id 'com.google.gms.google-services'
+    id 'kotlinx-serialization'
 }
 
 android {
