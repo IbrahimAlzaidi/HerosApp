@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HerosApp</string>
     <string name="app_logo">App Logo</string>
     <string name="greetings_on_board">Are you a Heroes fan? Because if you are then we have a great news for you</string>
     <string name="explore_on_board">Find your favorite heroes and learn some of the things that you didn\'t know about.</string>
