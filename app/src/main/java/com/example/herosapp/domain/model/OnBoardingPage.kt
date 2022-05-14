@@ -7,21 +7,23 @@ sealed class OnBoardingPage(
     @DrawableRes
     val image: Int,
     val title: String,
-    val description: String
-){
-    object First: OnBoardingPage(
+    val description: String,
+) {
+    object First : OnBoardingPage(
         image = R.drawable.greetings,
         title = "Greetings",
-        description = R.string.greetings_on_board.toString()
+        description = "Are you a Heroes fan? Because if you are then we have a great news for you"
     )
-    object Second: OnBoardingPage(
+
+    object Second : OnBoardingPage(
         image = R.drawable.explore,
         title = "Explore",
-        description = R.string.explore_on_board.toString()
+        description = "Find your favorite heroes and learn some of the things that you didn\'t know about."
     )
-    object Third: OnBoardingPage(
+
+    object Third : OnBoardingPage(
         image = R.drawable.power,
         title = "Power",
-        description = R.string.power_on_board.toString()
+        description = "Check out your hero\'s power and  see how much are they strong comparing to others."
     )
 }
