@@ -2,6 +2,7 @@ package com.example.herosapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.herosapp.data.local.HeroDatabase
 import com.example.herosapp.util.Constants.DATABASE_NAME
 import dagger.Module
@@ -20,9 +21,11 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
-    ) = Room.databaseBuilder(
-        context,
-        HeroDatabase::class.java,
-        DATABASE_NAME
-    ).build()
+    ): HeroDatabase {
+        return Room.databaseBuilder(
+            context,
+            HeroDatabase::class.java,
+            DATABASE_NAME
+        ).build()
+    }
 }

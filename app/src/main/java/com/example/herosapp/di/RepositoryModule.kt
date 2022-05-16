@@ -5,6 +5,7 @@ import com.example.herosapp.data.repository.DataStoreOperationImpl
 import com.example.herosapp.data.repository.Repository
 import com.example.herosapp.domain.repository.DataStoreOperations
 import com.example.herosapp.domain.use_cases.UseCases
+import com.example.herosapp.domain.use_cases.get_all_heroes.GetAllHeroesUseCase
 import com.example.herosapp.domain.use_cases.read_onboarding.ReadOnBoardingUseCase
 import com.example.herosapp.domain.use_cases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
@@ -32,7 +33,8 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository) : UseCases {
         return UseCases(
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
-            readOnBoardingUseCase = ReadOnBoardingUseCase(repository)
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
+            getAllHeroesUseCase = GetAllHeroesUseCase(repository)
         )
     }
 
