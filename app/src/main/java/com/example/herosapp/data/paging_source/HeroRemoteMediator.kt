@@ -11,7 +11,7 @@ import com.example.herosapp.domain.model.Hero
 import com.example.herosapp.domain.model.HeroRemoteKeys
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagingApi::class)
+@ExperimentalPagingApi
 class HeroRemoteMediator @Inject constructor(
     private val heroApi: HeroApi,
     private val heroDatabase: HeroDatabase,
@@ -42,9 +42,8 @@ class HeroRemoteMediator @Inject constructor(
                         )
                     nextPage
                 }
-                else -> {}
             }
-            val response = heroApi.getAllHeroes(page = 0)
+            val response = heroApi.getAllHeroes(page = page)
             if (response.heroes.isNotEmpty()) {
                 heroDatabase.withTransaction {
                     if (loadType == LoadType.REFRESH) {
