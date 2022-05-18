@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
@@ -32,6 +33,7 @@ import com.example.herosapp.R
 import com.example.herosapp.domain.model.Hero
 import com.example.herosapp.navigation.Screen
 import com.example.herosapp.presentation.components.RatingWidget
+import com.example.herosapp.presentation.components.ShimmerEffect
 import com.example.herosapp.ui.theme.*
 import com.example.herosapp.util.Constants.BASE_URL
 
@@ -41,26 +43,54 @@ fun ListContent(
     navController: NavHostController,
     heroes: LazyPagingItems<Hero>,
 ) {
+    val result = handlePagingResult(heroes = heroes)
+    if (result){
 
+        Log.d("LazyITems", heroes.loadState.toString())
+        LazyColumn(
+            contentPadding = PaddingValues(all = SMALL_PADDING),
+            verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
+        ) {
+            items(
+                items = heroes,
+                key = { hero ->
+                    hero.id
+                }
+            ) { hero ->
+                hero?.let {
+                    HeroItem(hero = it, navController = navController)
+                }
 
-    Log.d("LazyITems", heroes.loadState.toString())
-    LazyColumn(
-        contentPadding = PaddingValues(all = SMALL_PADDING),
-        verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
-    ) {
-        items(
-            items = heroes,
-            key = { hero ->
-                hero.id
             }
-        ) { hero ->
-            hero?.let {
-                HeroItem(hero = it, navController = navController)
-            }
-
         }
     }
 
+}
+
+@Composable
+fun handlePagingResult(
+    heroes: LazyPagingItems<Hero>
+): Boolean {
+    heroes.apply {
+        val error = when {
+            loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+            loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+            loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+            else -> null
+        }
+
+        return when {
+            loadState.refresh is LoadState.Loading -> {
+                ShimmerEffect()
+                false
+            }
+            error != null -> {
+                EmptyScreen(error = error)
+                false
+            }
+            else -> true
+        }
+    }
 }
 
 @Composable
