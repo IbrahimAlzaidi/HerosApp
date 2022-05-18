@@ -1,9 +1,11 @@
 package com.example.herosapp.presentation.common
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -23,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.example.herosapp.R
 import com.example.herosapp.domain.model.Hero
@@ -31,11 +35,31 @@ import com.example.herosapp.presentation.components.RatingWidget
 import com.example.herosapp.ui.theme.*
 import com.example.herosapp.util.Constants.BASE_URL
 
+@ExperimentalCoilApi
 @Composable
 fun ListContent(
     navController: NavHostController,
     heroes: LazyPagingItems<Hero>,
 ) {
+
+
+    Log.d("LazyITems", heroes.loadState.toString())
+    LazyColumn(
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
+    ) {
+        items(
+            items = heroes,
+            key = { hero ->
+                hero.id
+            }
+        ) { hero ->
+            hero?.let {
+                HeroItem(hero = it, navController = navController)
+            }
+
+        }
+    }
 
 }
 
@@ -56,7 +80,7 @@ fun HeroItem(
                 navController.navigate(Screen.Details.passHeroId(heroId = hero.id))
             },
         contentAlignment = Alignment.BottomStart) {
-        Surface(shape = Shapes.large) {
+        Surface(shape = RoundedCornerShape(size = LARGE_PADDING)) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = painter,
