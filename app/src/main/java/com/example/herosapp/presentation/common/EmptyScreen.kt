@@ -22,11 +22,19 @@ import com.example.herosapp.ui.theme.DarkGray
 import com.example.herosapp.ui.theme.LightGray
 import com.example.herosapp.ui.theme.NETWORK_ERROR_ICON_HEIGHT
 import com.example.herosapp.ui.theme.SMALL_PADDING
+import java.net.ConnectException
+import java.net.SocketException
 
 @Composable
-fun EmptyScreen(error: LoadState.Error) {
-    val message by remember { mutableStateOf(parseErrorMessage(message = error.toString())) }
-    val icon by remember { mutableStateOf(R.drawable.ic_network_error) }
+fun EmptyScreen(error: LoadState.Error? = null) {
+    var message by remember { mutableStateOf("Find your Favorite Hero!") }
+    var icon by remember { mutableStateOf(R.drawable.ic_search_document) }
+
+    if (error != null){
+        message = parseErrorMessage(error = error)
+        icon = R.drawable.ic_network_error
+    }
+
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim by animateFloatAsState(targetValue = if (startAnimation) ContentAlpha.disabled else 0f,
         animationSpec = tween(
@@ -73,12 +81,12 @@ fun EmptyContent(alphaAnim: Float, icon: Int, message: String) {
 }
 
 
-fun parseErrorMessage(message: String): String {
-    return when {
-        message.contains("SocketTimeoutException") -> {
+fun parseErrorMessage(error: LoadState.Error): String {
+    return when (error.error) {
+        is SocketException -> {
             "Server Unavalible."
         }
-        message.contains("ConnectException") -> {
+        is ConnectException -> {
             " Internet Unavailable."
         }
         else -> {
