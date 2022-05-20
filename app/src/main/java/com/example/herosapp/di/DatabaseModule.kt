@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.herosapp.data.local.HeroDatabase
+import com.example.herosapp.data.repository.LocalDataSourceImpl
+import com.example.herosapp.domain.repository.LocalDataSource
 import com.example.herosapp.util.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -27,5 +29,15 @@ object DatabaseModule {
             HeroDatabase::class.java,
             DATABASE_NAME
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(
+        heroDatabase: HeroDatabase
+    ): LocalDataSource{
+        return LocalDataSourceImpl(
+            heroDatabase = heroDatabase
+        )
     }
 }
